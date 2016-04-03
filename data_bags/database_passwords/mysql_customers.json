@@ -1,0 +1,15 @@
+{
+  "id": "mysql_customers",
+  "root_password": {
+    "encrypted_data": "xJ04C8UGjAAe5XzNHzYLT8PvnmEEChfWtgLosJc3kiA=\n",
+    "iv": "UPJXcJqjLRN5IpTcW+Lyvg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "admin_password": {
+    "encrypted_data": "Jpx7UB2CTx7C88fQZ7ncB8Qf2zdhHu24/X46/qk585o=\n",
+    "iv": "ckunMNrZVAJKhsv6n4GoDA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}
