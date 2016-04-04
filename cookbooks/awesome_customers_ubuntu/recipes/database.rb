@@ -22,3 +22,40 @@ mysql_service 'default' do
   initial_root_password password_data_bag_item['root_password']
   action [:create, :start]
 end
+
+# Create the database instance.
+mysql_database node['awesome_customers_ubuntu']['database']['dbname'] do
+  connection(
+    :host => node['awesome_customers_ubuntu']['database']['host'],
+    :username => node['awesome_customers_ubuntu']['database']['root_username'],
+    :password => 'mysql_root_password'
+  )
+  action :create
+end
+
+# Add a database user.
+mysql_database_user node['awesome_customers_ubuntu']['database']['admin_username'] do
+  connection(
+    :host => node['awesome_customers_ubuntu']['database']['host'],
+    :username => node['awesome_customers_ubuntu']['database']['root_username'],
+    :password => password_data_bag_item['root_password']
+  )
+  password password_data_bag_item['admin_password']
+  database_name node['awesome_customers_ubuntu']['database']['dbname']
+  host node['awesome_customers_ubuntu']['database']['host']
+  action [:create, :grant]
+end
+
+# Write schema seed file to filesystem.
+cookbook_file '/tmp/create-tables.sql' do
+  source 'create-tables.sql'
+  owner 'root'
+  group 'root'
+  mode '0600'
+end
+
+# Seed the database with a table and test data.
+execute 'initialize my_company database' do
+  command "mysql -h 127.0.0.1 -u db_admin -pdatabase_password -D my_company < /tmp/create-tables.sql"
+  not_if  "mysql -h 127.0.0.1 -u db_admin -pdatabase_password -D my_company -e 'describe customers;'"
+end
