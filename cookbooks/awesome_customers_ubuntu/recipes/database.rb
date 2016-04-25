@@ -28,7 +28,7 @@ mysql_database node['awesome_customers_ubuntu']['database']['dbname'] do
   connection(
     :host => node['awesome_customers_ubuntu']['database']['host'],
     :username => node['awesome_customers_ubuntu']['database']['root_username'],
-    :password => 'mysql_root_password'
+    :password => password_data_bag_item['root_password']
   )
   action :create
 end
@@ -55,7 +55,7 @@ cookbook_file '/tmp/create-tables.sql' do
 end
 
 # Seed the database with a table and test data.
-execute 'initialize my_company database' do
-  command "mysql -h 127.0.0.1 -u db_admin -pdatabase_password -D my_company < /tmp/create-tables.sql"
-  not_if  "mysql -h 127.0.0.1 -u db_admin -pdatabase_password -D my_company -e 'describe customers;'"
+execute "initialize #{node['awesome_customers_ubuntu']['database']['dbname']} database" do
+  command "mysql -h #{node['awesome_customers_ubuntu']['database']['host']} -u #{node['awesome_customers_ubuntu']['database']['admin_username']} -p#{password_data_bag_item['admin_password']} -D #{node['awesome_customers_ubuntu']['database']['dbname']} < #{node['awesome_customers_ubuntu']['database']['create_tables_script']}"
+  not_if  "mysql -h #{node['awesome_customers_ubuntu']['database']['host']} -u #{node['awesome_customers_ubuntu']['database']['admin_username']} -p#{password_data_bag_item['admin_password']} -D #{node['awesome_customers_ubuntu']['database']['dbname']} -e 'describe customers;'"
 end

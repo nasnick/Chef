@@ -8,3 +8,4 @@ CREATE TABLE customers(
 
 INSERT INTO customers ( id, first_name, last_name, email ) VALUES ( uuid(), 'Jane', 'Smith', 'jane.smith@example.com' );
 INSERT INTO customers ( id, first_name, last_name, email ) VALUES ( uuid(), 'Dave', 'Richards', 'dave.richards@example.com' );
+INSERT INTO customers ( id, first_name, last_name, email ) VALUES ( uuid(), 'Roger', 'Roo', 'roger.roo@example.com' );
